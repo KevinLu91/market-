@@ -1,0 +1,20 @@
+{
+  "marketexam": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-market-marketexam-95910-authRole",
+      "UnauthRoleArn": "arn:aws:iam::976185173022:role/amplify-market-marketexam-95910-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::976185173022:role/amplify-market-marketexam-95910-authRole",
+      "Region": "eu-west-1",
+      "DeploymentBucketName": "amplify-market-marketexam-95910-deployment",
+      "UnauthRoleName": "amplify-market-marketexam-95910-unauthRole",
+      "StackName": "amplify-market-marketexam-95910",
+      "StackId": "arn:aws:cloudformation:eu-west-1:976185173022:stack/amplify-market-marketexam-95910/c62b3c00-5afd-11eb-9ac4-0634f7381a5d",
+      "AmplifyAppId": "d1san58oltdo7y"
+    },
+    "categories": {
+      "auth": {
+        "market021dc733": {}
+      }
+    }
+  }
+}
