@@ -61,6 +61,7 @@ const Navbar = (props) => {
                 </span>
               </NavLink>
             </Typography>
+            <NavLink to='/market/33'>Market 33</NavLink>
             <Typography>{props.userData.user.username}</Typography>
             <Button color='inherit' onClick={handeSignOut}>
               Sign Out
@@ -68,7 +69,6 @@ const Navbar = (props) => {
           </Toolbar>
         </AppBar>
       </div>
-      <NavLink to='/market/33'>Market 33</NavLink>
     </div>
   );
 };

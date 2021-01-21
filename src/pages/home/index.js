@@ -1,9 +1,13 @@
 import React from 'react';
 
+import NewMarket from './components/NewMarket';
+import { useStyles } from './style';
+
 const Home = () => {
+  const classes = useStyles();
   return (
-    <div>
-      <p>Home Page</p>
+    <div className={classes.container}>
+      <NewMarket />
     </div>
   );
 };
