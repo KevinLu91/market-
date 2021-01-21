@@ -1,4 +1,10 @@
-import { CREATE_MARKET, CREATE_MARKET_MODAL } from './marketTypes';
+import {
+  CREATE_MARKET,
+  HANDLE_MARKET_MODAL,
+  ADD_MARKET_TAG,
+  ADD_MARKET_NAME,
+  REMOVE_MARKET_TAG,
+} from './marketTypes';
 
 export const createMarket = () => {
   return {
@@ -6,8 +12,29 @@ export const createMarket = () => {
   };
 };
 
-export const createModal = () => {
+export const handleMarketModal = () => {
   return {
-    type: CREATE_MARKET_MODAL,
+    type: HANDLE_MARKET_MODAL,
+  };
+};
+
+export const addMarketTag = (tag = []) => {
+  return {
+    type: ADD_MARKET_TAG,
+    payload: tag,
+  };
+};
+
+export const removeMarketTag = (tag = '') => {
+  return {
+    type: REMOVE_MARKET_TAG,
+    payload: tag,
+  };
+};
+
+export const addMarketName = (name = '') => {
+  return {
+    type: ADD_MARKET_NAME,
+    payload: name,
   };
 };

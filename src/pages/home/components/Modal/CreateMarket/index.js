@@ -9,73 +9,59 @@ import {
   Button,
   Backdrop,
   Fade,
-  InputLabel,
-  Select,
-  FormControl,
-  Box,
-  Chip,
+  CircularProgress,
 } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { API, graphqlOperation } from 'aws-amplify';
-import { createMarket } from '../../../../../graphql/mutations';
-import { initalTags } from '../../../../../utility/tags';
 
+import { createMarket } from '../../../../../graphql/mutations';
+import { handleMarketModal, addMarketName } from './../../../../../redux';
 import { useStyles } from './modelStyle';
+import Category from './category';
 
 const CreateMarket = (props) => {
   const [inputValue, setInputValue] = useState('');
-  const [selectedTags, setSelectedTags] = useState([]);
-  const [selectedTag, setSelectedTag] = useState('');
+  const [loading, setLoading] = useState(false);
   const classes = useStyles();
 
   const handleSubmit = async () => {
+    setLoading(true);
+    props.addMarketName(inputValue);
     try {
       const marketDetails = {
         name: inputValue,
-        tags: [selectedTag],
+        tags: props.marketData.selectedTags,
         owner: props.userData.user.username,
       };
       const newMarket = await API.graphql(
         graphqlOperation(createMarket, { input: marketDetails })
       );
-      console.log(newMarket);
-      console.log('ssuuubmit');
-      handleModalClose();
+      console.log(newMarket, 'submit!');
+      handleModal();
     } catch (err) {
+      setLoading(false);
       console.error(err);
     }
   };
 
-  const handleModalClose = () => {
+  const handleModal = () => {
     setInputValue('');
-    setSelectedTags([]);
-    setSelectedTag('');
-    props.setCreate(!props.create);
-  };
-
-  const handleAddTag = () => {
-    if (selectedTags.includes(selectedTag) || !selectedTag) {
-      return;
-    }
-    setSelectedTags([...selectedTags, selectedTag]);
-  };
-
-  const handleDeleteTag = (data) => {
-    setSelectedTags(selectedTags.filter((tag) => tag !== data));
+    setLoading(false);
+    props.handleMarketModal();
   };
 
   return (
     <Modal
       className={classes.modal}
-      open={props.create}
-      onClose={handleModalClose}
+      open={props.marketData.createModal}
+      onClose={handleModal}
       closeAfterTransition
       BackdropComponent={Backdrop}
       BackdropProps={{
         timeout: 500,
       }}
     >
-      <Fade in={props.create}>
+      <Fade in={props.marketData.createModal}>
         <Card className={classes.modal__card}>
           <CardContent>
             <Typography
@@ -88,73 +74,28 @@ const CreateMarket = (props) => {
             <Typography color='textSecondary'>Add market name:</Typography>
             <TextField
               fullWidth
+              autoFocus
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
             />
-            <Box className={classes.modal__box}>
-              <FormControl
-                variant='outlined'
-                className={classes.modal__formControl}
-              >
-                <InputLabel htmlFor='modal__inputLabel'>Category</InputLabel>
-                <Select
-                  native
-                  id='modal__inputLabel'
-                  label='Category'
-                  value={selectedTag}
-                  onChange={(e) => setSelectedTag(e.target.value)}
-                  inputProps={{
-                    name: 'Category',
-                    id: 'modal__inputLabel',
-                  }}
-                >
-                  <option value='' />
-                  {initalTags.map((category) => (
-                    <optgroup key={category.category} label={category.category}>
-                      {category.tags.map((tag) => (
-                        <option key={tag} value={tag}>
-                          {tag}
-                        </option>
-                      ))}
-                    </optgroup>
-                  ))}
-                </Select>
-              </FormControl>
+          </CardContent>
+          <Category />
+          <CardActions className={classes.modal__cardActions}>
+            <Button variant='contained' onClick={handleModal}>
+              Cancel
+            </Button>
+            {loading ? (
+              <CircularProgress />
+            ) : (
               <Button
                 variant='contained'
                 color='primary'
-                className={`${classes.modal__button}--add`}
-                onClick={handleAddTag}
+                onClick={handleSubmit}
+                disabled={inputValue ? false : true}
               >
-                Add
+                Create
               </Button>
-            </Box>
-            {selectedTags.length > 0 && (
-              <Box>
-                {selectedTags.map((tag, i) => (
-                  <Chip
-                    key={tag}
-                    variant='outlined'
-                    label={tag}
-                    className={classes.modal__chip}
-                    onDelete={() => handleDeleteTag(tag)}
-                  />
-                ))}
-              </Box>
             )}
-          </CardContent>
-          <CardActions className={classes.modal__cardActions}>
-            <Button variant='contained' onClick={handleModalClose}>
-              Cancel
-            </Button>
-            <Button
-              variant='contained'
-              color='primary'
-              onClick={handleSubmit}
-              disabled={inputValue ? false : true}
-            >
-              Create
-            </Button>
           </CardActions>
         </Card>
       </Fade>
@@ -165,7 +106,15 @@ const CreateMarket = (props) => {
 const mapStateToProps = (state) => {
   return {
     userData: state.user,
+    marketData: state.market,
   };
 };
 
-export default connect(mapStateToProps)(CreateMarket);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    handleMarketModal: () => dispatch(handleMarketModal()),
+    addMarketName: (inputValue) => dispatch(addMarketName(inputValue)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(CreateMarket);

@@ -18,6 +18,7 @@ export const useStyles = makeStyles((theme) => ({
     marginBottom: '1rem',
   },
   modal__cardActions: {
+    marginTop: '1rem',
     justifyContent: 'flex-end',
   },
   modal__box: {

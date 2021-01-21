@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Card,
   CardActions,
@@ -7,18 +7,18 @@ import {
   Typography,
 } from '@material-ui/core';
 import StoreMallDirectoryOutlinedIcon from '@material-ui/icons/StoreMallDirectoryOutlined';
+import { connect } from 'react-redux';
 
+import { handleMarketModal } from './../../../redux';
 import { useStyles } from '../style';
 import CreateMarket from '../components/Modal/CreateMarket';
 
-const NewMarket = () => {
-  const [create, setCreate] = useState(false);
-
+const NewMarket = (props) => {
   const classes = useStyles();
   return (
     <div>
-      <CreateMarket create={create} setCreate={setCreate} />
-      <Card className={classes.card} onClick={() => setCreate(true)}>
+      <CreateMarket />
+      <Card className={classes.card} onClick={props.handleMarketModal}>
         <CardContent>
           <Typography
             variant='h5'
@@ -38,4 +38,10 @@ const NewMarket = () => {
   );
 };
 
-export default NewMarket;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    handleMarketModal: () => dispatch(handleMarketModal()),
+  };
+};
+
+export default connect(null, mapDispatchToProps)(NewMarket);
