@@ -36,7 +36,6 @@ const CreateMarket = (props) => {
       const newMarket = await API.graphql(
         graphqlOperation(createMarket, { input: marketDetails })
       );
-      console.log(newMarket, 'submit!');
       handleModal();
     } catch (err) {
       setLoading(false);

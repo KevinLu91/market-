@@ -54,10 +54,3 @@ export const initalTags = [
     ],
   },
 ];
-
-// 'Vehicle',
-// 'Personal',
-// 'For the home',
-// 'Electrical',
-// 'Free time & hobby',
-// 'Other',
