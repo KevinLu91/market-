@@ -33,7 +33,7 @@ const CreateMarket = (props) => {
         tags: props.marketData.selectedTags,
         owner: props.userData.user.username,
       };
-      const newMarket = await API.graphql(
+      await API.graphql(
         graphqlOperation(createMarket, { input: marketDetails })
       );
       handleModal();

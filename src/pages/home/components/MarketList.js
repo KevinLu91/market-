@@ -4,15 +4,21 @@ import { Card, Box, Chip } from '@material-ui/core';
 import CardContent from '@material-ui/core/CardContent';
 import { Typography } from '@material-ui/core';
 import ShoppingCart from '@material-ui/icons/ShoppingCart';
+import { connect } from 'react-redux';
 
 import { listMarkets } from '../../../graphql/queries';
 import { onCreateMarket } from '../../../graphql/subscriptions';
 import { useStyles } from './MarketListStyle';
+import { Done } from '@material-ui/icons';
 
-const MarketList = () => {
+const MarketList = (props) => {
   const [marketList, setMarketList] = useState([]);
   const [newMarket, setNewMarket] = useState('');
   let subscriptionOnCreate;
+  let renderList =
+    props.searchData.searchResults.length > 0
+      ? props.searchData.searchResults
+      : marketList;
   const classes = useStyles();
 
   useEffect(() => {
@@ -46,9 +52,16 @@ const MarketList = () => {
 
   return (
     <div className={classes.container}>
-      <p>MarketList</p>
+      {props.searchData.searchResults.length > 0 ? (
+        <div>
+          <Done />
+          {props.searchData.searchResults.length}{' '}
+        </div>
+      ) : (
+        <p>MarketList</p>
+      )}
       {marketList.length > 0 ? (
-        marketList.map((market) => (
+        renderList.map((market) => (
           <Card key={market.id} className={classes.card}>
             <CardContent className={classes.cardContent}>
               <Box className={classes.cardContent__info}>
@@ -85,4 +98,10 @@ const MarketList = () => {
   );
 };
 
-export default MarketList;
+const mapStateToProps = (state) => {
+  return {
+    searchData: state.search,
+  };
+};
+
+export default connect(mapStateToProps)(MarketList);
