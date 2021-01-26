@@ -4,10 +4,8 @@ import { Paper, InputBase, Divider } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
 import { connect } from 'react-redux';
-import { API, graphqlOperation } from 'aws-amplify';
 import { useDebounce } from 'use-debounce';
 
-import { searchMarkets } from './../../../graphql/queries';
 import { fetchSearch } from './../../../redux';
 
 const useStyles = makeStyles((theme) => ({

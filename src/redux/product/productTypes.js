@@ -1,0 +1,2 @@
+export const CREATE_PRODUCT = 'CREATE_PRODUCT';
+export const INITAL_PRODUCT = 'INITAL_PRODUCT';

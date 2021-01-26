@@ -5,6 +5,7 @@ import CardContent from '@material-ui/core/CardContent';
 import { Typography } from '@material-ui/core';
 import ShoppingCart from '@material-ui/icons/ShoppingCart';
 import { connect } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
 import { listMarkets } from '../../../graphql/queries';
 import { onCreateMarket } from '../../../graphql/subscriptions';
@@ -20,6 +21,7 @@ const MarketList = (props) => {
       ? props.searchData.searchResults
       : marketList;
   const classes = useStyles();
+  const history = useHistory();
 
   useEffect(() => {
     API.graphql(graphqlOperation(listMarkets))
@@ -53,16 +55,20 @@ const MarketList = (props) => {
   return (
     <div className={classes.container}>
       {props.searchData.searchResults.length > 0 ? (
-        <div>
-          <Done />
+        <div className={classes.container__title}>
+          <Done className={classes.container__icon} />
           {props.searchData.searchResults.length}{' '}
         </div>
       ) : (
-        <p>MarketList</p>
+        <div className={classes.container__title}>MarketList</div>
       )}
       {marketList.length > 0 ? (
         renderList.map((market) => (
-          <Card key={market.id} className={classes.card}>
+          <Card
+            key={market.id}
+            className={classes.card}
+            onClick={() => history.push(`/market/${market.id}`)}
+          >
             <CardContent className={classes.cardContent}>
               <Box className={classes.cardContent__info}>
                 <Box className={classes.cardContent__titleContainer}>

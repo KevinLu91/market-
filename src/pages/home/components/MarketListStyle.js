@@ -4,7 +4,17 @@ export const useStyles = makeStyles({
   container: {
     width: '80vw',
   },
+  container__title: {
+    display: 'flex',
+    alignItems: 'center',
+    marginTop: '1.5rem',
+    marginBottom: '1.5rem',
+  },
+  container__icon: {
+    marginRight: '0.5rem',
+  },
   card: {
+    cursor: 'pointer',
     marginBottom: '1.5rem',
   },
   cardContent: {

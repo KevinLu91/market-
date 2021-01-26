@@ -23,5 +23,11 @@
         }
       }
     }
+  },
+  "storage": {
+    "s3349fc727": {
+      "service": "S3",
+      "providerPlugin": "awscloudformation"
+    }
   }
 }
