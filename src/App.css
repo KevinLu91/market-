@@ -4,3 +4,7 @@ a:hover,
 a:active {
   color: inherit;
 }
+
+body {
+  background-color: #f9f7f6;
+}

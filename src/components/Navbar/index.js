@@ -68,7 +68,6 @@ const Navbar = (props) => {
           </Toolbar>
         </AppBar>
       </div>
-      <NavLink to='/market/33'>Market 33</NavLink>
     </div>
   );
 };

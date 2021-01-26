@@ -1,9 +1,17 @@
 import React from 'react';
+import MarketList from './components/MarketList';
+
+import NewMarket from './components/NewMarket';
+import SearchField from './components/SearchFiled';
+import { useStyles } from './style';
 
 const Home = () => {
+  const classes = useStyles();
   return (
-    <div>
-      <p>Home Page</p>
+    <div className={classes.container}>
+      <NewMarket />
+      <SearchField />
+      <MarketList />
     </div>
   );
 };
