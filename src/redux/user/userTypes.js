@@ -1,1 +1,2 @@
 export const GET_USER = 'GET_USER';
+export const GET_USER_CREDENTIALS = 'GET_USER_CREDENTIALS';

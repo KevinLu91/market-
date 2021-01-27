@@ -1,4 +1,4 @@
-export { getUser } from './user/userActions';
+export { getUser, getUserCredentials } from './user/userActions';
 export * from './market/marketActions';
 export * from './seach/searchActions';
 export * from './product/productAction';

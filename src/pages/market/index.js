@@ -4,9 +4,38 @@ import { useHistory } from 'react-router-dom';
 import { Typography, Box } from '@material-ui/core';
 import { Event } from '@material-ui/icons';
 
-import { getMarket } from '../../graphql/queries';
+//import { getMarket } from '../../graphql/queries';
 import { useStyles } from './style';
 import TabsContainer from './components/Tabs';
+
+export const getMarket = /* GraphQL */ `
+  query GetMarket($id: ID!) {
+    getMarket(id: $id) {
+      id
+      name
+      products {
+        items {
+          id
+          description
+          price
+          shipped
+          owner
+          file {
+            key
+            bucket
+          }
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      tags
+      owner
+      createdAt
+      updatedAt
+    }
+  }
+`;
 
 const Market = (props) => {
   const [market, setMarket] = useState('');
@@ -14,14 +43,20 @@ const Market = (props) => {
   const classes = useStyles();
 
   useEffect(() => {
+    let mounted = true;
     API.graphql(graphqlOperation(getMarket, { id: props.marketId }))
       .then((res) => {
-        console.log(res.data.getMarket);
-        setMarket(res.data.getMarket);
+        if (mounted) {
+          console.log(res.data.getMarket);
+          setMarket(res.data.getMarket);
+        }
       })
       .catch((err) => {
         console.log(err);
       });
+    return function clenaup() {
+      mounted = false;
+    };
   }, [props.marketId]);
 
   return (
@@ -40,7 +75,6 @@ const Market = (props) => {
           <Typography className={classes.container__secondElem}>-</Typography>
           <Typography>{market.id}</Typography>
         </Box>
-
         <Box className={classes.container__Box}>
           <Event className={classes.container__firstElem} />
           <Typography>{market.createdAt}</Typography>

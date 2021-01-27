@@ -1,24 +1,44 @@
-import { CREATE_PRODUCT, INITAL_PRODUCT } from './productTypes';
+import {
+  ADD_PRODUCT,
+  INITAL_PRODUCT,
+  TAB_INDEX,
+  POST_PRODUCT_FAILURE,
+  POST_PRODUCT_SUCCESS,
+} from './productTypes';
 
 const initialState = {
-  description: '',
-  price: '',
-  shipped: false,
-  image: '',
+  tab: 0,
+  addProduct: {},
+  error: false,
+  success: false,
 };
 
 const productReducer = (state = initialState, action) => {
   switch (action.type) {
-    case CREATE_PRODUCT:
+    case ADD_PRODUCT:
       return {
-        description: action.payload.description,
-        price: action.payload.price,
-        shipped: action.payload.shipped,
-        image: action.payload.image,
+        ...state,
+        addProduct: action.payload,
+      };
+    case TAB_INDEX:
+      return {
+        ...state,
+        tab: action.payload,
       };
     case INITAL_PRODUCT:
       return {
-        initialState,
+        ...state,
+        addProcut: {},
+      };
+    case POST_PRODUCT_FAILURE:
+      return {
+        ...state,
+        error: action.payload,
+      };
+    case POST_PRODUCT_SUCCESS:
+      return {
+        ...state,
+        success: action.payload,
       };
     default:
       return state;

@@ -33,8 +33,6 @@ const Navbar = (props) => {
     }
   };
 
-  //lägg till användarens namn to /profile
-
   return (
     <div>
       <div className={classes.root}>

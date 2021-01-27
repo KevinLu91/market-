@@ -3,17 +3,20 @@ import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
 import { connect } from 'react-redux';
 
-import { postProductFailure } from '../redux';
+import { postProductSuccess } from '../redux';
 
-const Error = (props) => {
+const Success = (props) => {
   return (
     <>
       <Snackbar
-        open={props.productData.error}
+        open={props.productData.success}
         autoHideDuration={3000}
-        onClose={() => props.postProductFailure(false)}
+        onClose={() => props.postProductSuccess(false)}
       >
-        <Alert severity='error' onClose={() => props.postProductFailure(false)}>
+        <Alert
+          severity='success'
+          onClose={() => props.postProductSuccess(false)}
+        >
           {props.message}
         </Alert>
       </Snackbar>
@@ -29,8 +32,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    postProductFailure: (boolean) => dispatch(postProductFailure(boolean)),
+    postProductSuccess: (success) => dispatch(postProductSuccess(success)),
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Error);
+export default connect(mapStateToProps, mapDispatchToProps)(Success);
