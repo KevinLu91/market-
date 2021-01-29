@@ -1,13 +1,15 @@
 import {
   ADD_PRODUCT,
-  INITAL_PRODUCT,
-  TAB_INDEX,
+  EDIT_PRODUCT,
   POST_PRODUCT_FAILURE,
   POST_PRODUCT_SUCCESS,
+  EDIT_PRODUCT_SHIPPED,
+  EDIT_PRODUCT_DESCRIPTION,
+  EDIT_PRODUCT_PRICE,
 } from './productTypes';
 
 const initialState = {
-  tab: 0,
+  editProduct: false,
   addProduct: {},
   error: false,
   success: false,
@@ -20,16 +22,30 @@ const productReducer = (state = initialState, action) => {
         ...state,
         addProduct: action.payload,
       };
-    case TAB_INDEX:
+    case EDIT_PRODUCT: {
       return {
         ...state,
-        tab: action.payload,
+        editProduct: action.payload,
       };
-    case INITAL_PRODUCT:
+    }
+    case EDIT_PRODUCT_SHIPPED: {
       return {
         ...state,
-        addProcut: {},
+        addProduct: { ...state.addProduct, shipped: action.payload },
       };
+    }
+    case EDIT_PRODUCT_DESCRIPTION: {
+      return {
+        ...state,
+        addProduct: { ...state.addProduct, description: action.payload },
+      };
+    }
+    case EDIT_PRODUCT_PRICE: {
+      return {
+        ...state,
+        addProduct: { ...state.addProduct, price: action.payload },
+      };
+    }
     case POST_PRODUCT_FAILURE:
       return {
         ...state,

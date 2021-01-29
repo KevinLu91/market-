@@ -20,11 +20,7 @@ import { Storage, API, graphqlOperation } from 'aws-amplify';
 import { useParams } from 'react-router-dom';
 
 import { useStyles, photoPickerTheme } from './NewProductStyle';
-import {
-  tabIndex,
-  postProductSuccess,
-  postProductFailure,
-} from '../../../redux';
+import { postProductSuccess, postProductFailure } from '../../../redux';
 import aws_exports from '../../../aws-exports';
 import UploadBar from '../../../components/UploadBar';
 import { createProduct } from '../../../graphql/mutations';
@@ -42,7 +38,7 @@ const NewProduct = (props) => {
   const classes = useStyles();
   const { marketId } = useParams();
 
-  const handePrice = (e) => {
+  const handlePrice = (e) => {
     const reg = new RegExp('(^$)|\\d+$'); // regex only '' or 0-9
     if (!reg.test(e.target.value)) {
       return;
@@ -86,7 +82,6 @@ const NewProduct = (props) => {
       props.postProductSuccess(true);
 
       setTimeout(() => {
-        props.tabIndex(0);
         setIsUploading(false);
         setDescription('');
         setPrice('');
@@ -128,7 +123,7 @@ const NewProduct = (props) => {
           </InputLabel>
           <OutlinedInput
             value={price}
-            onChange={handePrice}
+            onChange={handlePrice}
             endAdornment={
               <InputAdornment position='end'>
                 <Euro fontSize='small' color='inherit' />
@@ -138,7 +133,7 @@ const NewProduct = (props) => {
           />
         </FormControl>
         <Typography className={classes.paper__title}>
-          Is the Product Shipped or Emailed to the Customer?
+          Is the Product Shipped or mailed to the Customer?
         </Typography>
         <FormControl component='fieldset'>
           <RadioGroup row value={shipped} onChange={handleShipped}>
@@ -150,7 +145,7 @@ const NewProduct = (props) => {
             <FormControlLabel
               value={false}
               control={<Radio />}
-              label='Emailed'
+              label='Mailed'
             />
           </RadioGroup>
         </FormControl>
@@ -202,7 +197,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    tabIndex: (index) => dispatch(tabIndex(index)),
     postProductSuccess: (boolean) => dispatch(postProductSuccess(boolean)),
     postProductFailure: (boolean) => dispatch(postProductFailure(boolean)),
   };

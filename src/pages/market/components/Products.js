@@ -1,49 +1,93 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { AmplifyS3Image } from '@aws-amplify/ui-react';
-import { Card, Paper, Typography, Box } from '@material-ui/core';
+import {
+  Card,
+  Typography,
+  Box,
+  CardMedia,
+  CardContent,
+  Button,
+  CardActions,
+} from '@material-ui/core';
 import { LocalShipping, Mail } from '@material-ui/icons';
+import { connect } from 'react-redux';
+import DeleteIcon from '@material-ui/icons/Delete';
+import CreateIcon from '@material-ui/icons/Create';
 
-import { getProduct } from '../../../graphql/queries';
+import { useStyles } from './ProductsStyle';
+import { editProduct, addProduct } from '../../../redux';
 
 const Products = (props) => {
-  console.log(props.product);
-  // useEffect(() => {
-  //   console.log(props.productId);
-  //   API.graphql(
-  //     graphqlOperation(getProduct, {
-  //       id: 'f7b7857a-a955-4f3e-8e06-0f034185e16c',
-  //     })
-  //   )
-  //     .then((res) => {
-  //       console.log(res);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // }, []);
+  const classes = useStyles();
 
+  const handleEdit = () => {
+    props.addProduct(props.product);
+    props.editProduct(true);
+  };
   return (
-    <Paper>
-      <Card>
-        <AmplifyS3Image imgKey={props.product.file.key} />
-        <Typography variant='h5'>{props.product.description}</Typography>
-        <Box>
+    <Card className={classes.card}>
+      <CardMedia>
+        <AmplifyS3Image
+          imgKey={props.product.file.key}
+          style={{ '--width': '99%', '--heigt': '100vh' }}
+        />
+      </CardMedia>
+      <CardContent>
+        <Typography variant='h4' className={classes.card___title}>
+          {props.product.description}
+        </Typography>
+        <Box className={classes.card___info}>
           {props.product.shipped ? (
-            <Box>
-              <LocalShipping />
+            <Box className={classes.card___shippInfo}>
+              <LocalShipping className={classes.card__icon} />
               <Typography>Shipped</Typography>
             </Box>
           ) : (
-            <Box>
-              <Mail />
+            <Box className={classes.card___shippInfo}>
+              <Mail className={classes.card__icon} />
               <Typography>Mailed</Typography>
             </Box>
           )}
+          <Typography className={classes.card___price}>
+            {props.product.price}€
+          </Typography>
         </Box>
-        <Typography>{props.product.price}€</Typography>
-      </Card>
-    </Paper>
+        <CardActions className={classes.card__cardAction}>
+          {props.product.owner !== props.userData.user.attributes.sub ? (
+            <Button variant='contained' startIcon={<CreateIcon />}>
+              Buy
+            </Button>
+          ) : (
+            <Box>
+              <Button variant='contained' onClick={handleEdit}>
+                Edit
+              </Button>
+              <Button
+                className={classes.card__button}
+                variant='contained'
+                startIcon={<DeleteIcon />}
+              >
+                Delete
+              </Button>
+            </Box>
+          )}
+        </CardActions>
+      </CardContent>
+    </Card>
   );
 };
 
-export default Products;
+const mapStateToProps = (state) => {
+  return {
+    userData: state.user,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    editProduct: (modal) => dispatch(editProduct(modal)),
+    addProduct: (data) => dispatch(addProduct(data)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Products);

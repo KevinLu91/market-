@@ -1,5 +1,5 @@
-import React from 'react';
-import { AppBar, Tabs, Tab, Typography } from '@material-ui/core';
+import React, { useState } from 'react';
+import { AppBar, Tabs, Tab, Typography, Paper } from '@material-ui/core';
 import { Add, ShoppingCart } from '@material-ui/icons';
 import { connect } from 'react-redux';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -7,17 +7,18 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { useStyles } from './../style';
 import NewProduct from './NewProduct';
 import Products from './Products';
-import { tabIndex } from '../../../redux';
+import EditModal from '../components/Modal/EditModal';
 
 const TabsContainer = (props) => {
+  const [tabIndex, setTabIndex] = useState(0);
   const classes = useStyles();
 
   return (
     <div className={classes.tabContainer}>
       <AppBar position='static'>
         <Tabs
-          value={props.productData.tab}
-          onChange={(e, newValue) => props.tabIndex(newValue)}
+          value={tabIndex}
+          onChange={(e, newValue) => setTabIndex(newValue)}
           variant='fullWidth'
         >
           <Tab label='Products' icon={<ShoppingCart fontSize='small' />} />
@@ -26,31 +27,25 @@ const TabsContainer = (props) => {
           )}
         </Tabs>
       </AppBar>
-      <div
-        role='tabpanel'
-        hidden={props.productData.tab !== 0}
-        value={props.productData.tab}
-      >
-        {props.market ? (
-          props.market.products.items.length > 0 ? (
-            props.market.products.items.map((product) => (
-              <Products key={product.id} product={product} />
-            ))
+      <div role='tabpanel' hidden={tabIndex !== 0} value={tabIndex}>
+        <Paper className={classes.tabContainer__paper}>
+          {props.market ? (
+            props.market.products.items.length > 0 ? (
+              props.market.products.items.map((product) => (
+                <Products key={product.id} product={product} />
+              ))
+            ) : (
+              <Typography>No products...</Typography>
+            )
           ) : (
-            <Typography>No products...</Typography>
-          )
-        ) : (
-          <CircularProgress />
-        )}
+            <CircularProgress />
+          )}
+        </Paper>
       </div>
-
-      <div
-        role='tabpanel'
-        hidden={props.productData.tab !== 1}
-        value={props.productData.tab}
-      >
+      <div role='tabpanel' hidden={tabIndex !== 1} value={tabIndex}>
         <NewProduct />
       </div>
+      <EditModal />
     </div>
   );
 };
@@ -62,10 +57,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    tabIndex: (index) => dispatch(tabIndex(index)),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(TabsContainer);
+export default connect(mapStateToProps)(TabsContainer);
