@@ -6,24 +6,15 @@ import {
   Box,
   CardMedia,
   CardContent,
-  Button,
-  CardActions,
 } from '@material-ui/core';
 import { LocalShipping, Mail } from '@material-ui/icons';
-import { connect } from 'react-redux';
-import DeleteIcon from '@material-ui/icons/Delete';
-import CreateIcon from '@material-ui/icons/Create';
 
 import { useStyles } from './ProductsStyle';
-import { editProduct, addProduct } from '../../../redux';
+import ProductsCardActions from './ProductsCardActions';
 
 const Products = (props) => {
   const classes = useStyles();
 
-  const handleEdit = () => {
-    props.addProduct(props.product);
-    props.editProduct(true);
-  };
   return (
     <Card className={classes.card}>
       <CardMedia>
@@ -52,42 +43,10 @@ const Products = (props) => {
             {props.product.price}€
           </Typography>
         </Box>
-        <CardActions className={classes.card__cardAction}>
-          {props.product.owner !== props.userData.user.attributes.sub ? (
-            <Button variant='contained' startIcon={<CreateIcon />}>
-              Buy
-            </Button>
-          ) : (
-            <Box>
-              <Button variant='contained' onClick={handleEdit}>
-                Edit
-              </Button>
-              <Button
-                className={classes.card__button}
-                variant='contained'
-                startIcon={<DeleteIcon />}
-              >
-                Delete
-              </Button>
-            </Box>
-          )}
-        </CardActions>
+        <ProductsCardActions product={props.product} />
       </CardContent>
     </Card>
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    userData: state.user,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    editProduct: (modal) => dispatch(editProduct(modal)),
-    addProduct: (data) => dispatch(addProduct(data)),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Products);
+export default Products;

@@ -27,6 +27,9 @@ export const useStyles = makeStyles((theme) => ({
       textAlign: 'center',
     },
   },
+  papper__buttonContainer: {
+    display: 'flex',
+  },
   paper_button: {
     marginLeft: '0.75rem',
   },

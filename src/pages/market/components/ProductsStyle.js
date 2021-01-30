@@ -29,12 +29,27 @@ export const useStyles = makeStyles((theme) => ({
   card___icon: {
     marginRight: '0.5rem',
   },
-  card__cardAction: {
+  cardAction: {
     marginTop: '1rem',
     display: 'flex',
     justifyContent: 'flex-end',
   },
-  card__button: {
+  cardAction__buttonContainer: {
+    display: 'flex',
+  },
+  cardAction__button: {
     marginLeft: '0.75rem',
+  },
+  popover__title: {
+    padding: '1.5rem',
+  },
+  popover__buttonContainer: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    marginRight: '1.5rem',
+    marginBottom: '1rem',
+  },
+  popover__button: {
+    marginRight: '0.5rem',
   },
 }));

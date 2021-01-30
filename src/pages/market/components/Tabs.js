@@ -38,7 +38,9 @@ const TabsContainer = (props) => {
               <Typography>No products...</Typography>
             )
           ) : (
-            <CircularProgress />
+            <div className={classes.tabContainer__loading}>
+              <CircularProgress />
+            </div>
           )}
         </Paper>
       </div>
