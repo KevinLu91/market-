@@ -4,9 +4,13 @@ import { useHistory } from 'react-router-dom';
 import { Typography, Box } from '@material-ui/core';
 import { Event } from '@material-ui/icons';
 
-//import { getMarket } from '../../graphql/queries';
 import { useStyles } from './style';
 import TabsContainer from './components/Tabs';
+import {
+  onCreateProduct,
+  onUpdateProduct,
+  onDeleteProduct,
+} from '../../graphql/subscriptions';
 
 export const getMarket = /* GraphQL */ `
   query GetMarket($id: ID!) {
@@ -39,6 +43,7 @@ export const getMarket = /* GraphQL */ `
 
 const Market = (props) => {
   const [market, setMarket] = useState('');
+  const [newProdct, setNewProduct] = useState('');
   const history = useHistory();
   const classes = useStyles();
 
@@ -54,10 +59,74 @@ const Market = (props) => {
       .catch((err) => {
         console.log(err);
       });
-    return function clenaup() {
+    return function cleanUp() {
       mounted = false;
     };
-  }, [props.marketId]);
+  }, [props.marketId, newProdct]);
+
+  useEffect(() => {
+    let mounted = true;
+    let subscription = API.graphql(graphqlOperation(onCreateProduct)).subscribe(
+      {
+        next: (productData) => {
+          if (mounted) {
+            console.log('hm');
+            setNewProduct(productData);
+          }
+        },
+        error: (error) => {
+          console.warn(error);
+        },
+      }
+    );
+
+    return function cleanUp() {
+      mounted = false;
+      subscription.unsubscribe();
+    };
+  }, []);
+
+  useEffect(() => {
+    let mounted = true;
+    let subscription = API.graphql(graphqlOperation(onUpdateProduct)).subscribe(
+      {
+        next: (productData) => {
+          if (mounted) {
+            setNewProduct(productData);
+          }
+        },
+        error: (error) => {
+          console.warn(error);
+        },
+      }
+    );
+
+    return function cleanUp() {
+      mounted = false;
+      subscription.unsubscribe();
+    };
+  }, []);
+
+  useEffect(() => {
+    let mounted = true;
+    let subscription = API.graphql(graphqlOperation(onDeleteProduct)).subscribe(
+      {
+        next: (productData) => {
+          if (mounted) {
+            setNewProduct(productData);
+          }
+        },
+        error: (error) => {
+          console.warn(error);
+        },
+      }
+    );
+
+    return function cleanUp() {
+      mounted = false;
+      subscription.unsubscribe();
+    };
+  }, []);
 
   return (
     <div className={classes.container}>

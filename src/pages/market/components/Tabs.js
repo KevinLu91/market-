@@ -21,7 +21,14 @@ const TabsContainer = (props) => {
           onChange={(e, newValue) => setTabIndex(newValue)}
           variant='fullWidth'
         >
-          <Tab label='Products' icon={<ShoppingCart fontSize='small' />} />
+          <Tab
+            label={
+              props.market.products
+                ? `Products (${props.market.products.items.length})`
+                : 0
+            }
+            icon={<ShoppingCart fontSize='small' />}
+          />
           {props.market.owner === props.userData.user.username && (
             <Tab label='Add Product' icon={<Add fontSize='small' />} />
           )}

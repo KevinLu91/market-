@@ -42,10 +42,9 @@ const ProductsCardActions = (props) => {
       };
       await API.graphql(graphqlOperation(deleteProduct, { input }));
       props.postProductSuccess(true);
-      setTimeout(() => {
-        setLoading(false);
-        setDeletePopover(null);
-      }, 2000);
+
+      setLoading(false);
+      setDeletePopover(null);
     } catch (err) {
       setLoading(false);
       props.postProductFailure(true);
