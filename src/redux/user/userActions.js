@@ -1,4 +1,4 @@
-import { GET_USER, GET_USER_CREDENTIALS } from './userTypes';
+import { GET_USER, GET_USER_CREDENTIALS, GET_USER_PROFILE } from './userTypes';
 
 export const getUser = (user = null) => {
   return {
@@ -11,5 +11,12 @@ export const getUserCredentials = (credentials = null) => {
   return {
     type: GET_USER_CREDENTIALS,
     payload: credentials,
+  };
+};
+
+export const getUserProfile = (profile = '') => {
+  return {
+    type: GET_USER_PROFILE,
+    payload: profile,
   };
 };

@@ -9,13 +9,23 @@ const Success = (props) => {
   return (
     <>
       <Snackbar
-        open={props.productData.success}
+        open={
+          props.snackSuccess ? props.snackSuccess : props.productData.success
+        }
         autoHideDuration={3000}
-        onClose={() => props.postProductSuccess(false)}
+        onClose={
+          props.setSnackSuccess
+            ? () => props.setSnackSuccess(false)
+            : () => props.postProductSuccess(false)
+        }
       >
         <Alert
           severity='success'
-          onClose={() => props.postProductSuccess(false)}
+          onClose={
+            props.setSnackSuccess
+              ? () => props.setSnackSuccess(false)
+              : () => props.postProductSuccess(false)
+          }
         >
           {props.message}
         </Alert>

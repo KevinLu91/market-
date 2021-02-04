@@ -10,7 +10,7 @@ const Home = () => {
   return (
     <div className={classes.container}>
       <NewMarket />
-      <SearchField />
+      {/* <SearchField /> */}
       <MarketList />
     </div>
   );

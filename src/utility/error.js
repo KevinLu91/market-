@@ -9,11 +9,22 @@ const Error = (props) => {
   return (
     <>
       <Snackbar
-        open={props.productData.error}
+        open={props.snackFailed ? props.snackFailed : props.productData.error}
         autoHideDuration={3000}
-        onClose={() => props.postProductFailure(false)}
+        onClose={
+          props.setSnackFailed
+            ? () => props.setSnackFailed(false)
+            : () => props.postProductFailure(false)
+        }
       >
-        <Alert severity='error' onClose={() => props.postProductFailure(false)}>
+        <Alert
+          severity='error'
+          onClose={
+            props.setSnackFailed
+              ? () => props.setSnackFailed(false)
+              : () => props.postProductFailure(false)
+          }
+        >
           {props.message}
         </Alert>
       </Snackbar>

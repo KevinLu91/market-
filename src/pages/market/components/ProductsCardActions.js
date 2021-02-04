@@ -9,7 +9,6 @@ import {
   CircularProgress,
 } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
-import CreateIcon from '@material-ui/icons/Create';
 import { API, graphqlOperation } from 'aws-amplify';
 
 import { useStyles } from './ProductsStyle';
@@ -22,10 +21,14 @@ import {
 import { deleteProduct } from '../../../graphql/mutations';
 import Success from '../../../utility/success';
 import Error from '../../../utility/error';
+import BuyButton from './BuyButton';
 
 const ProductsCardActions = (props) => {
   const [deletePopover, setDeletePopover] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [snackSuccess, setSnackSuccess] = useState(false);
+  const [snackFailed, setSnackFailed] = useState(false);
+
   const open = Boolean(deletePopover);
   const classes = useStyles();
 
@@ -56,10 +59,22 @@ const ProductsCardActions = (props) => {
     <CardActions className={classes.cardAction}>
       <Success message='Successfully deleted product!' />
       <Error message='Failed to delete product, try again!' />
+      <Success
+        message='Order processed successfully!'
+        snackSuccess={snackSuccess}
+        setSnackSuccess={setSnackSuccess}
+      />
+      <Error
+        message='Failed to buy product, try again!'
+        snackFailed={snackFailed}
+        setSnackFailed={setSnackFailed}
+      />
       {props.product.owner !== props.userData.user.attributes.sub ? (
-        <Button variant='contained' startIcon={<CreateIcon />}>
-          Buy
-        </Button>
+        <BuyButton
+          product={props.product}
+          setSnackSuccess={setSnackSuccess}
+          setSnackFailed={setSnackFailed}
+        />
       ) : (
         <Box className={classes.cardAction__buttonContainer}>
           <Button variant='contained' onClick={handleEdit}>
