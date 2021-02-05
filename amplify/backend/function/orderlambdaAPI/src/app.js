@@ -14,8 +14,8 @@ var stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 var AWS = require('aws-sdk');
 
 const config = {
-  accessKeyId: 'AKIAIGWWQVOTKOR2EQ3A',
-  secretAccessKey: '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',
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   region: 'eu-west-1',
   adminEmail: 'kevinl_91@hotmail.com',
 };
@@ -85,7 +85,7 @@ const emailHandler = async (req, res) => {
       Source: config.adminEmail,
       ReturnPath: config.adminEmail,
       Destination: {
-        ToAddresses: [config.adminEmail, customerEmail, ownerEmail],
+        ToAddresses: [config.adminEmail],
       },
       Message: {
         Subject: {
