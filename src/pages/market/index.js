@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { API, graphqlOperation } from 'aws-amplify';
 import { useHistory } from 'react-router-dom';
-import { Typography, Box } from '@material-ui/core';
+import { Typography, Box, Button } from '@material-ui/core';
 import { Event } from '@material-ui/icons';
+import { connect } from 'react-redux';
 
 import { useStyles } from './style';
 import TabsContainer from './components/Tabs';
@@ -11,13 +12,14 @@ import {
   onUpdateProduct,
   onDeleteProduct,
 } from '../../graphql/subscriptions';
+import ProductExpansionActions from './components/ProductExpansionActions';
 
 export const getMarket = /* GraphQL */ `
   query GetMarket($id: ID!) {
     getMarket(id: $id) {
       id
       name
-      products {
+      products(sortDirection: DESC) {
         items {
           id
           description
@@ -131,12 +133,13 @@ const Market = (props) => {
   return (
     <div className={classes.container}>
       <div className={classes.container__market}>
-        <Typography
+        <Button
           onClick={() => history.push('/')}
           className={classes.container__link}
+          variant='contained'
         >
           Back to market list
-        </Typography>
+        </Button>
         <Box className={classes.container__Box}>
           <Typography variant='h4' className={classes.container__firstElem}>
             {market.name}
@@ -148,10 +151,19 @@ const Market = (props) => {
           <Event className={classes.container__firstElem} />
           <Typography>{market.createdAt}</Typography>
         </Box>
+        {market.owner === props.userData.username && (
+          <ProductExpansionActions market={market} setMarket={setMarket} />
+        )}
       </div>
       <TabsContainer market={market} />
     </div>
   );
 };
 
-export default Market;
+const mapStateToProps = (state) => {
+  return {
+    userData: state.user.user,
+  };
+};
+
+export default connect(mapStateToProps)(Market);

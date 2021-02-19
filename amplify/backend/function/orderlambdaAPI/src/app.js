@@ -10,15 +10,10 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var awsServerlessExpressMiddleware = require('aws-serverless-express/middleware');
 require('dotenv').config();
-var stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+var stripe = require('stripe')();
 var AWS = require('aws-sdk');
 
-const config = {
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  region: 'eu-west-1',
-  adminEmail: 'kevinl_91@hotmail.com',
-};
+const config = {};
 
 var ses = new AWS.SES(config);
 // declare a new express app
@@ -57,7 +52,7 @@ const chargeHandler = async (req, res, next) => {
 
   try {
     const charge = await stripe.charges.create({
-      amount,
+      amount: amount * 100,
       currency,
       description,
       source: token.id,
@@ -85,7 +80,7 @@ const emailHandler = async (req, res) => {
       Source: config.adminEmail,
       ReturnPath: config.adminEmail,
       Destination: {
-        ToAddresses: [config.adminEmail],
+        ToAddresses: [config.adminEmail, ownerEmail, customerEmail],
       },
       Message: {
         Subject: {
@@ -96,18 +91,29 @@ const emailHandler = async (req, res) => {
             Charset: 'UTF-8',
             Data: `
               <h3>Order Processed!</h3>
-              <p><span style="font-weight: bold">${description}</span> ${charge.amount}${charge.currency}</p>
+              <p style="font-weight: bold">Description: ${description}</p>
+              <p>${charge.amount / 100}€</p>
               <p>Customer Email: <a href="mailto:${customerEmail}">${customerEmail}</a></p>
               <p>Contact your seller: <a href="mailto:${ownerEmail}">${ownerEmail}</a></p>
-
-              <h4>{shipped ? "Shipping Address" : "Mailing Address"}</h4>
-              <p>${charge.source.name}</p>
-              <p>${charge.source.address_line1}</p>
-              <p>${charge.source.address_city}, ${charge.source.address_zip}</p
+              
+              ${shipped ? `<p>${charge.source.name}</p>` : `<span></span>`}
+              ${
+                shipped
+                  ? `<p>${charge.source.address_line1}</p>`
+                  : `<span></span>`
+              }
+              ${
+                shipped
+                  ? `<p>${charge.source.address_city}, ${charge.source.address_zip}</p>`
+                  : `<span></span>`
+              }
 
               <p style="font-style: italic; color: grey;">
-               "Your product will be delivered in 2-3 days"
-              </p>
+               "Your product will be ${
+                 shipped ? 'delivered' : 'emailed to you'
+               } in 1-3 days"
+               <p style="font-weight: bold">Thank you for your order!</p>
+              
             `,
           },
         },

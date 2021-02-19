@@ -19,7 +19,22 @@ export const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     alignItems: 'center',
   },
-  card: {
+  orderCard: {
     width: '50%',
+    marginBottom: '1rem',
+    padding: '1rem',
   },
+  orderCard__typograpphy: {
+    marginBottom: '0.5rem',
+    marginLeft: '1rem',
+
+    '&--emailed': {
+      marginLeft: '1rem',
+    },
+    '&--shipped': {
+      marginBottom: '0.5rem',
+      marginLeft: '2rem',
+    },
+  },
+  tableContainer: {},
 }));

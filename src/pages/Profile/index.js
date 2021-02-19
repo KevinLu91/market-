@@ -16,7 +16,7 @@ const fetchUser = /* GraphQL */ `
       username
       email
       registered
-      orders {
+      orders(sortDirection: DESC) {
         items {
           id
           createdAt
@@ -59,6 +59,7 @@ const Profile = (props) => {
       .catch((err) => {
         console.log(err);
       });
+    // eslint-disable-next-line
   }, []);
 
   return (

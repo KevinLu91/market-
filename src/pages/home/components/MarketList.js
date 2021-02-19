@@ -38,8 +38,11 @@ const MarketList = (props) => {
     subscriptionMarketList();
 
     return () => {
-      subscriptionOnCreate.unsubscribe();
+      if (subscriptionOnCreate) {
+        subscriptionOnCreate.unsubscribe();
+      }
     };
+
     // eslint-disable-next-line
   }, []);
 
