@@ -15,14 +15,17 @@ import Success from './../../../utility/success';
 import Error from './../../../utility/error';
 import EditMarketModal from './Modal/EditMarketModal';
 import { handleMarketModal } from '../.././../redux';
+import { useStyles } from '../style';
 
 const ProductExpansionActions = (props) => {
   const [modal, setModal] = useState(false);
   const [snackFailed, setSnackFailed] = useState(false);
   const [snackSuccess, setSnackSuccess] = useState(false);
 
+  const classes = useStyles();
+
   return (
-    <div>
+    <div className={classes.marketAction}>
       <Success
         message='Market Deleted!'
         snackSuccess={snackSuccess}

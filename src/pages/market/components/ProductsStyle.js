@@ -36,9 +36,15 @@ export const useStyles = makeStyles((theme) => ({
   },
   cardAction__buttonContainer: {
     display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+  },
+  cardAction__edit: {
+    marginTop: '0.5rem',
   },
   cardAction__button: {
     marginLeft: '0.75rem',
+    marginTop: '0.5rem',
   },
   popover__title: {
     padding: '1.5rem',

@@ -40,4 +40,7 @@ export const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  marketAction: {
+    marginBottom: '1rem',
+  },
 }));

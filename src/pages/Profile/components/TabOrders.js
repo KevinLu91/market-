@@ -1,17 +1,28 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, Typography, Box } from '@material-ui/core';
 import { connect } from 'react-redux';
+import { parseISO } from 'date-fns';
+import Pagination from '@material-ui/lab/Pagination';
 
 import { useStyles } from '../style';
+import { formatOrderDate } from '../../../utility';
 
 const TabOrders = (props) => {
+  const [activePage, setActivePage] = useState(1);
   const classes = useStyles();
+  const ordersPerPage = 2;
+  const indexOfLastOrder = activePage * ordersPerPage;
+  const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
+  const currentOrders = props.profileData.orders.items.slice(
+    indexOfFirstOrder,
+    indexOfLastOrder
+  );
 
   return (
     <div className={classes.tabContainer}>
       <h3>ORDER HISTORY</h3>
       {props.profileData.orders.items.length > 0 ? (
-        props.profileData.orders.items.map((item) => (
+        currentOrders.map((item) => (
           <Card className={classes.orderCard} key={item.id}>
             <Typography className={classes.orderCard__typograpphy}>
               Ordernumber: {item.id}
@@ -23,7 +34,7 @@ const TabOrders = (props) => {
               Price: {item.product.price}€
             </Typography>
             <Typography className={classes.orderCard__typograpphy}>
-              Purchased on: {item.createdAt}
+              Purchased on: {formatOrderDate(parseISO(item.createdAt))}
             </Typography>
             {item.shippingAddress ? (
               <Box>
@@ -61,6 +72,17 @@ const TabOrders = (props) => {
           <Typography>No orders...</Typography>
         </Card>
       )}
+      <div>
+        <Pagination
+          count={Math.ceil(
+            props.profileData.orders.items.length / ordersPerPage
+          )}
+          page={activePage}
+          onChange={(e, value) => setActivePage(value)}
+          showFirstButton
+          showLastButton
+        />
+      </div>
     </div>
   );
 };

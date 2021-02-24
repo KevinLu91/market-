@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { AppBar, Toolbar, Typography, Button } from '@material-ui/core';
+import { AppBar, Toolbar, Typography, Button, Drawer } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import { AccountBox, Menu } from '@material-ui/icons';
 import StoreMallDirectoryIcon from '@material-ui/icons/StoreMallDirectory';
@@ -9,8 +9,10 @@ import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
 import { useStyles } from './style';
+import HamburgerMenu from './hamburgerMenu';
 
 const Navbar = (props) => {
+  const [menuDrawer, setMenuDrawer] = useState(false);
   const classes = useStyles();
   const history = useHistory();
 
@@ -33,6 +35,7 @@ const Navbar = (props) => {
               className={classes.toolbar__menuButton}
               color='inherit'
               aria-label='menu'
+              onClick={() => setMenuDrawer(true)}
             >
               <Menu />
             </IconButton>
@@ -55,6 +58,13 @@ const Navbar = (props) => {
             </Button>
           </Toolbar>
         </AppBar>
+        <Drawer
+          anchor='left'
+          open={menuDrawer}
+          onClose={() => setMenuDrawer(false)}
+        >
+          <HamburgerMenu />
+        </Drawer>
       </div>
     </div>
   );

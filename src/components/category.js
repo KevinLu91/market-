@@ -25,6 +25,7 @@ const Category = (props) => {
         }
       }
     }
+    // eslint-disable-next-line
   }, []);
 
   const handleAddTag = () => {

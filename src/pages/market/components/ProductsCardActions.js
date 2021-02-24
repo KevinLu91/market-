@@ -77,7 +77,11 @@ const ProductsCardActions = (props) => {
         />
       ) : (
         <Box className={classes.cardAction__buttonContainer}>
-          <Button variant='contained' onClick={handleEdit}>
+          <Button
+            variant='contained'
+            onClick={handleEdit}
+            className={classes.cardAction__edit}
+          >
             Edit
           </Button>
           <div>

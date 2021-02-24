@@ -10,10 +10,8 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var awsServerlessExpressMiddleware = require('aws-serverless-express/middleware');
 require('dotenv').config();
-var stripe = require('stripe')();
-var AWS = require('aws-sdk');
 
-const config = {};
+var AWS = require('aws-sdk');
 
 var ses = new AWS.SES(config);
 // declare a new express app

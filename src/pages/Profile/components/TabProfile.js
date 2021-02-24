@@ -22,7 +22,7 @@ const TabProfile = (props) => {
   const profileSummary = [
     { name: 'Your Id', value: props.userData.attributes.sub },
     { name: 'Username', value: props.userData.username },
-    { name: 'Email', value: props.userData.attributes.email, action: 'edit' },
+    { name: 'Email', value: props.userData.attributes.email },
     { name: 'Phone Number', value: props.userData.attributes.phone_number },
     { name: 'Delete Profile', value: 'delete', action: 'delete' },
   ];

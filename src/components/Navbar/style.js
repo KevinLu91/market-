@@ -23,4 +23,13 @@ export const useStyles = makeStyles((theme) => ({
   toolbar__icon: {
     marginRight: '0.5rem',
   },
+  menu: {
+    width: 250,
+  },
+  menu__listItem: {
+    cursor: 'pointer',
+    '&:hover': {
+      background: '#e3e2dd',
+    },
+  },
 }));

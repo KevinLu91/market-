@@ -13,6 +13,7 @@ import {
   onDeleteProduct,
 } from '../../graphql/subscriptions';
 import ProductExpansionActions from './components/ProductExpansionActions';
+import { formatProductDate } from '../../utility';
 
 export const getMarket = /* GraphQL */ `
   query GetMarket($id: ID!) {
@@ -72,7 +73,6 @@ const Market = (props) => {
       {
         next: (productData) => {
           if (mounted) {
-            console.log('hm');
             setNewProduct(productData);
           }
         },
@@ -149,7 +149,7 @@ const Market = (props) => {
         </Box>
         <Box className={classes.container__Box}>
           <Event className={classes.container__firstElem} />
-          <Typography>{market.createdAt}</Typography>
+          <Typography>{formatProductDate(market.createdAt)}</Typography>
         </Box>
         {market.owner === props.userData.username && (
           <ProductExpansionActions market={market} setMarket={setMarket} />
