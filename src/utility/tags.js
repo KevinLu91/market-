@@ -53,4 +53,8 @@ export const initalTags = [
       'Sport & leisure equipment',
     ],
   },
+  {
+    category: 'EDUCATION',
+    tags: ['Courses', 'Lessons', 'BootCamp'],
+  },
 ];

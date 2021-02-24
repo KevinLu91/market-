@@ -17,7 +17,7 @@ import { API, graphqlOperation } from 'aws-amplify';
 import { createMarket } from '../../../../../graphql/mutations';
 import { handleMarketModal, addMarketName } from './../../../../../redux';
 import { useStyles } from './modelStyle';
-import Category from './category';
+import Category from '../../../../../components/category';
 
 const CreateMarket = (props) => {
   const [inputValue, setInputValue] = useState('');

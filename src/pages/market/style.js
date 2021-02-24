@@ -29,4 +29,18 @@ export const useStyles = makeStyles((theme) => ({
   tabContainer: {
     width: '80%',
   },
+  tabContainer__paper: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+  },
+  tabContainer__loading: {
+    height: '50vh',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  marketAction: {
+    marginBottom: '1rem',
+  },
 }));

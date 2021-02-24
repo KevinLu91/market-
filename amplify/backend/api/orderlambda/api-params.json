@@ -1,0 +1,42 @@
+{
+    "paths": [
+        {
+            "name": "/charge",
+            "lambdaFunction": "orderlambdaAPI",
+            "privacy": {
+                "private": true,
+                "auth": [
+                    "/POST",
+                    "/GET",
+                    "/PUT",
+                    "/PATCH",
+                    "/DELETE"
+                ]
+            },
+            "policyResourceName": "/charge"
+        }
+    ],
+    "resourceName": "orderlambda",
+    "apiName": "orderlambda",
+    "functionArns": [
+        {
+            "lambdaFunction": "orderlambdaAPI"
+        }
+    ],
+    "privacy": {
+        "auth": 1,
+        "unauth": 0,
+        "authRoleName": "amplify-market-marketexam-95910-authRole",
+        "unAuthRoleName": "amplify-market-marketexam-95910-unauthRole"
+    },
+    "dependsOn": [
+        {
+            "category": "function",
+            "resourceName": "orderlambdaAPI",
+            "attributes": [
+                "Name",
+                "Arn"
+            ]
+        }
+    ]
+}

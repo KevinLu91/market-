@@ -12,32 +12,34 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
-  Box,
-  LinearProgress,
+  CircularProgress,
 } from '@material-ui/core';
 import { Euro } from '@material-ui/icons';
 import { connect } from 'react-redux';
-import { Storage, Auth, API, graphqlOperation } from 'aws-amplify';
+import { Storage, API, graphqlOperation } from 'aws-amplify';
 import { useParams } from 'react-router-dom';
-import PropTypes from 'prop-types';
 
 import { useStyles, photoPickerTheme } from './NewProductStyle';
-import { createMarketProduct } from '../../../redux';
+import { postProductSuccess, postProductFailure } from '../../../redux';
 import aws_exports from '../../../aws-exports';
+import UploadBar from '../../../components/UploadBar';
 import { createProduct } from '../../../graphql/mutations';
+import Success from '../../../utility/success';
+import Error from '../../../utility/error';
 
 const NewProduct = (props) => {
   const [description, setDescription] = useState('');
-  const [price, setPrice] = useState(0);
+  const [price, setPrice] = useState('');
   const [shipped, setShipped] = useState(true);
+  const [imagePreview, setImagePreview] = useState('');
   const [productImage, setProductImage] = useState('');
   const [isUploading, setIsUploading] = useState(false);
   const [percentUploaded, setPercentUploaded] = useState(0);
   const classes = useStyles();
   const { marketId } = useParams();
 
-  const handePrice = (e) => {
-    const reg = new RegExp('^\\d+$');
+  const handlePrice = (e) => {
+    const reg = new RegExp('(^$)|\\d+$'); // regex only '' or 0-9
     if (!reg.test(e.target.value)) {
       return;
     }
@@ -51,12 +53,10 @@ const NewProduct = (props) => {
   const handleCreateProduct = async () => {
     try {
       setIsUploading(true);
-      console.log(productImage);
       const visibility = 'public';
-      const { identityId } = await Auth.currentCredentials();
-      const filename = `/${visibility}/${identityId}/${Date.now()}-${
-        productImage.name
-      }`;
+      const filename = `/${visibility}/${
+        props.userData.userCredentials.identityId
+      }/${Date.now()}-${productImage.name}`;
       const uploadedFile = await Storage.put(filename, productImage.file, {
         contentType: productImage.type,
         progressCallback: (progress) => {
@@ -66,47 +66,41 @@ const NewProduct = (props) => {
         },
       });
 
-      const file = {
-        key: uploadedFile.key,
-        bucket: aws_exports.aws_user_files_s3_bucket,
-        region: aws_exports.aws_user_files_s3_bucket_region,
-      };
-
       const input = {
         description,
-        file,
+        file: {
+          key: uploadedFile.key,
+          bucket: aws_exports.aws_user_files_s3_bucket,
+          region: aws_exports.aws_user_files_s3_bucket_region,
+        },
         productMarketId: marketId,
         price,
         shipped,
       };
 
-      const result = await API.graphql(
-        graphqlOperation(createProduct, { input })
-      );
-      console.log(result);
-      // props.createMarketProduct(input);
-    } catch (err) {
-      console.log(err);
-    }
-  };
+      await API.graphql(graphqlOperation(createProduct, { input }));
+      props.postProductSuccess(true);
 
-  const LinearProgressWithLabel = (value) => {
-    return (
-      <Box display='flex' alignItems='center'>
-        <Box width='100%' mr={1}>
-          <LinearProgress variant='determinate' value={value} />
-        </Box>
-        <Box minWidth={35}>
-          <Typography variant='body2' color='textSecondary'>{`${Math.round(
-            value
-          )}%`}</Typography>
-        </Box>
-      </Box>
-    );
+      setTimeout(() => {
+        setIsUploading(false);
+        setDescription('');
+        setPrice('');
+        setShipped(true);
+        setProductImage('');
+        setPercentUploaded(0);
+        setImagePreview('');
+      }, 2000);
+    } catch (err) {
+      props.postProductFailure(true);
+      console.log(err);
+      setIsUploading(false);
+    }
   };
 
   return (
     <Paper className={classes.paper}>
+      <Success message='Product successfully created!' />
+      <Error message='Product creation failed, try again!' />
       <Typography variant='h5' className={classes.paper__title}>
         ADD NEW PRODUCT
       </Typography>
@@ -129,8 +123,7 @@ const NewProduct = (props) => {
           </InputLabel>
           <OutlinedInput
             value={price}
-            type='number'
-            onChange={handePrice}
+            onChange={handlePrice}
             endAdornment={
               <InputAdornment position='end'>
                 <Euro fontSize='small' color='inherit' />
@@ -140,7 +133,7 @@ const NewProduct = (props) => {
           />
         </FormControl>
         <Typography className={classes.paper__title}>
-          Is the Product Shipped or Emailed to the Customer?
+          Is the Product Shipped or mailed to the Customer?
         </Typography>
         <FormControl component='fieldset'>
           <RadioGroup row value={shipped} onChange={handleShipped}>
@@ -152,35 +145,61 @@ const NewProduct = (props) => {
             <FormControlLabel
               value={false}
               control={<Radio />}
-              label='Emailed'
+              label='Mailed'
             />
           </RadioGroup>
         </FormControl>
         <Paper>
+          {imagePreview && (
+            <img
+              src={imagePreview}
+              alt='product'
+              className={classes.paper__image}
+            />
+          )}
           <PhotoPicker
-            preview
+            preview='hidden'
             theme={photoPickerTheme}
+            onLoad={(url) => setImagePreview(url)}
             onPick={(file) => setProductImage(file)}
           />
         </Paper>
-        {LinearProgressWithLabel(percentUploaded)}
-        <Button
-          variant='contained'
-          onClick={handleCreateProduct}
-          disabled={!description || (!productImage && true)}
-          className={classes.papper__button}
-        >
-          Add Product
-        </Button>
+        <UploadBar value={percentUploaded} />
+        {isUploading ? (
+          <Button
+            variant='contained'
+            onClick={handleCreateProduct}
+            disabled={!description || (!productImage && true)}
+            className={classes.paper__button}
+          >
+            <CircularProgress />
+          </Button>
+        ) : (
+          <Button
+            variant='contained'
+            onClick={handleCreateProduct}
+            disabled={!description || (!productImage && true)}
+            className={classes.paper__button}
+          >
+            Add Product
+          </Button>
+        )}
       </form>
     </Paper>
   );
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapStateToProps = (state) => {
   return {
-    createMarketProduct: (data) => dispatch(createMarketProduct(data)),
+    userData: state.user,
   };
 };
 
-export default connect(null, mapDispatchToProps)(NewProduct);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    postProductSuccess: (boolean) => dispatch(postProductSuccess(boolean)),
+    postProductFailure: (boolean) => dispatch(postProductFailure(boolean)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(NewProduct);

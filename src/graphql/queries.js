@@ -109,9 +109,9 @@ export const listProducts = /* GraphQL */ `
     }
   }
 `;
-export const getUser = /* GraphQL */ `
-  query GetUser($id: ID!) {
-    getUser(id: $id) {
+export const fetchUser = /* GraphQL */ `
+  query FetchUser($id: ID!) {
+    fetchUser(id: $id) {
       id
       username
       email
@@ -126,28 +126,6 @@ export const getUser = /* GraphQL */ `
       }
       createdAt
       updatedAt
-    }
-  }
-`;
-export const listUsers = /* GraphQL */ `
-  query ListUsers(
-    $filter: ModelUserFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listUsers(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        username
-        email
-        registered
-        orders {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
-      nextToken
     }
   }
 `;

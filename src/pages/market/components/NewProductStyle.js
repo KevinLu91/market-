@@ -12,11 +12,16 @@ export const useStyles = makeStyles((theme) => ({
     marginBottom: '1rem',
     marginTop: '1rem',
   },
-  papper__button: {
+  paper__button: {
+    marginTop: '1rem',
+    marginBottom: '2rem',
+  },
+  paper_loading: {
     marginTop: '1rem',
     marginBottom: '2rem',
   },
   paper__image: {
+    marginTop: '1rem',
     width: '30vw',
   },
 }));

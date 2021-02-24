@@ -38,9 +38,13 @@ const MarketList = (props) => {
     subscriptionMarketList();
 
     return () => {
-      subscriptionOnCreate.unsubscribe();
+      if (subscriptionOnCreate) {
+        subscriptionOnCreate.unsubscribe();
+      }
     };
-  });
+
+    // eslint-disable-next-line
+  }, []);
 
   const subscriptionMarketList = async () => {
     subscriptionOnCreate = await API.graphql(
@@ -79,9 +83,7 @@ const MarketList = (props) => {
                   >
                     {market.name}
                   </Typography>
-                  <Typography className={classes.cardContent__product}>
-                    {market.products.length > 0 ? market.products.length : 0}
-                  </Typography>
+
                   <ShoppingCart />
                 </Box>
                 <Typography color='textSecondary'>{market.owner}</Typography>

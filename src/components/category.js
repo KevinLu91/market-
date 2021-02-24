@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Button,
   InputLabel,
@@ -9,13 +9,24 @@ import {
 } from '@material-ui/core';
 import { connect } from 'react-redux';
 
-import { useStyles } from './modelStyle';
-import { initalTags } from '../../../../../utility/tags';
-import { addMarketTag, removeMarketTag } from './../../../../../redux';
+import { useStyles } from '../pages/home/components/Modal/CreateMarket/modelStyle';
+import { initalTags } from '../utility/tags';
+import { addMarketTag, removeMarketTag } from '../redux';
 
 const Category = (props) => {
   const [selectedTag, setSelectedTag] = useState('');
   const classes = useStyles();
+
+  useEffect(() => {
+    if (props.market) {
+      if (props.market.tags.length > 0) {
+        for (let i = 0; i < props.market.tags.length; i++) {
+          props.addMarketTag(props.market.tags[i]);
+        }
+      }
+    }
+    // eslint-disable-next-line
+  }, []);
 
   const handleAddTag = () => {
     if (props.marketData.selectedTags.includes(selectedTag) || !selectedTag) {
